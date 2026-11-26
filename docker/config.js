@@ -233,7 +233,7 @@ function initialize(env = process.env, { automatic = false } = {}) {
     )
       throw new Error('Database password file is invalid or insecure. Restore the original file.');
     assertEnvironment(config, env);
-    return;
+    return 'kept';
   }
   if (secretNames.some((name) => Boolean(env[name])))
     throw new Error(
@@ -247,12 +247,19 @@ function initialize(env = process.env, { automatic = false } = {}) {
   }
   publish(configFile(env), JSON.stringify(freshSecrets()) + '\n');
   publish(databaseFile, crypto.randomBytes(32).toString('base64url') + '\n');
+  return 'created';
 }
+const initializeMessages = {
+  created: 'Installation secrets created.',
+  kept: 'Installation secrets already exist and were kept unchanged.',
+};
 if (require.main === module) {
   try {
     if (process.argv[2] === 'initialize' || process.argv[2] === 'initialize-catalog') {
-      initialize(process.env, { automatic: process.argv[2] === 'initialize-catalog' });
-      console.log('Installation secrets are ready. Existing values were preserved.');
+      const result = initialize(process.env, {
+        automatic: process.argv[2] === 'initialize-catalog',
+      });
+      console.log(initializeMessages[result]);
     } else if (process.argv[2] === 'value' && secretNames.includes(process.argv[3])) {
       const config = readConfig();
       if (!config) throw new Error('Persistent secrets are missing. Refusing to start.');

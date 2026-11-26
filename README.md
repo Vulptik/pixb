@@ -10,7 +10,7 @@ Drop something in, find it later, and share it when you want to.
 
 [![CI](https://github.com/Vulptik/pixb/actions/workflows/ci.yml/badge.svg)](https://github.com/Vulptik/pixb/actions/workflows/ci.yml)
 [![Latest release](https://img.shields.io/github/v/release/Vulptik/pixb)](https://github.com/Vulptik/pixb/releases/latest)
-[![License: AGPL-3.0](https://img.shields.io/github/license/Vulptik/pixb)](LICENSE)
+[![License: AGPL-3.0](https://img.shields.io/github/license/Vulptik/pixb?cacheSeconds=86400)](LICENSE)
 
 [Install](#install) · [Features](#features) · [Privacy](#privacy) · [Develop](#develop) · [License](#license)
 

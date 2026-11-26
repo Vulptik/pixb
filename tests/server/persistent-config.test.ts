@@ -1,5 +1,6 @@
 import { beforeEach, afterEach, expect, it, vi } from 'vitest';
 import { createRequire } from 'node:module';
+import { spawnSync } from 'node:child_process';
 import {
   mkdirSync,
   mkdtempSync,
@@ -96,14 +97,33 @@ it('rejects partial environment key imports', async () => {
   expect(existsSync(configFile(env))).toBe(false);
 });
 it('initializes both kinds of secrets explicitly without rotating either on a repeat', () => {
-  initialize(env);
+  expect(initialize(env)).toBe('created');
   const file = path.join(env.PIXB_DATABASE_SECRET_PATH, 'postgres-password');
   const password = readFileSync(file, 'utf8');
   const config = readConfig(env);
-  initialize(env);
+  expect(initialize(env)).toBe('kept');
   expect(readConfig(env)).toEqual(config);
   expect(readFileSync(file, 'utf8')).toBe(password);
   expect(password.trim().length).toBeGreaterThanOrEqual(32);
+});
+it('reports whether init-config created secrets or kept existing ones', () => {
+  // Run the real command, without the keys the test setup puts in the environment.
+  const childEnv = Object.fromEntries(
+    Object.entries(process.env).filter(
+      ([name]) => !['JWT_SECRET', 'ENCRYPTION_KEY', 'NEXTAUTH_SECRET'].includes(name),
+    ),
+  );
+  const run = () =>
+    spawnSync(process.execPath, ['docker/config.js', 'initialize'], {
+      env: { ...childEnv, ...env },
+      encoding: 'utf8',
+    });
+  const first = run();
+  expect(first.status).toBe(0);
+  expect(first.stdout.trim()).toBe('Installation secrets created.');
+  const second = run();
+  expect(second.status).toBe(0);
+  expect(second.stdout.trim()).toBe('Installation secrets already exist and were kept unchanged.');
 });
 it('refuses incomplete initialization instead of inventing a missing database password', () => {
   initialize(env);
