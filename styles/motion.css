@@ -1,0 +1,428 @@
+/* Short feedback for controls; slower settling for surfaces entering the workspace. */
+:root {
+  --motion-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-settle: cubic-bezier(0.18, 0.82, 0.24, 1.08);
+  --motion-fast: 140ms;
+  --motion-surface: 240ms;
+  --motion-disclosure: 300ms;
+}
+
+.motion-presence {
+  display: grid;
+  grid-template-rows: 1fr;
+  min-width: 0;
+  opacity: 1;
+  translate: 0 0;
+}
+.motion-grid {
+  position: relative;
+}
+.motion-presence[data-presence] {
+  animation: none;
+}
+.motion-presence-body {
+  min-height: 0;
+  display: flow-root;
+}
+.motion-presence[data-presence='entering'],
+.motion-presence[data-presence='closed'] {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  translate: 0 4px;
+}
+.motion-presence[data-presence='closed'] {
+  pointer-events: none;
+}
+.motion-presence[data-presence='closed'] > .motion-presence-body {
+  overflow: hidden;
+}
+.upload-queue > .motion-presence-body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.upload-queue-list {
+  flex: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .motion-presence {
+    transition:
+      grid-template-rows 180ms var(--motion-ease),
+      opacity 180ms var(--motion-ease),
+      translate 240ms var(--motion-ease);
+  }
+  .motion-presence[data-presence='closed'] {
+    transition-duration: 180ms;
+  }
+  .settings-section-content,
+  .collection-gallery .collection-card,
+  .library-empty,
+  .form-error,
+  .form-field-error {
+    animation: workspace-enter var(--motion-surface) var(--motion-ease) both;
+  }
+  .collection-cover-photo {
+    transition: transform 420ms var(--motion-ease);
+  }
+  .collection-card:focus-visible .collection-cover-photo {
+    transform: translate(calc(var(--photo-x) * 1.22), calc(var(--photo-y) - 4%))
+      rotate(calc(var(--photo-angle) * 1.15));
+  }
+  .collection-card:focus-visible {
+    transform: translateY(-2px);
+  }
+  .auth-password-toggle,
+  .text-button,
+  .drop-card,
+  .membership-row .button,
+  .account-menu :is(a, button),
+  .library-sort-option,
+  .pixb-popover [role^='menuitem'],
+  .pixb-checkbox,
+  .pixb-switch {
+    transition:
+      background-color var(--motion-fast) var(--motion-ease),
+      border-color var(--motion-fast) var(--motion-ease),
+      color var(--motion-fast) var(--motion-ease),
+      box-shadow var(--motion-fast) var(--motion-ease),
+      transform var(--motion-surface) var(--motion-settle);
+  }
+  .theme-toggle > svg,
+  .auth-password-toggle > svg,
+  .password-requirements svg {
+    animation: glyph-enter 220ms var(--motion-settle) both;
+  }
+  .password-strength-bars > span {
+    transition:
+      background-color 240ms var(--motion-ease),
+      scale 240ms var(--motion-settle);
+    scale: 1 0.8;
+  }
+  .password-strength-bars > span[data-active='true'] {
+    scale: 1;
+  }
+  .password-requirements li {
+    transition: color 180ms var(--motion-ease);
+  }
+  .pixb-switch-thumb {
+    transition: translate 260ms var(--motion-settle);
+  }
+  .pixb-checkbox-indicator[data-state='checked'] {
+    animation: glyph-enter 180ms var(--motion-settle) both;
+  }
+  .pixb-checkbox-indicator[data-state='unchecked'] {
+    animation: presence-exit 120ms ease-in both;
+  }
+  .pixb-popover {
+    transform-origin: var(--radix-popper-transform-origin);
+  }
+  .pixb-popover[data-state='open'],
+  .pixb-popover[data-state='delayed-open'],
+  .pixb-popover[data-state='instant-open'] {
+    animation: menu-enter 180ms var(--motion-ease) both;
+  }
+  .pixb-popover[data-state='closed'] {
+    animation: menu-exit 120ms ease-in both;
+  }
+  html,
+  body,
+  .shelf,
+  .auth-shell,
+  .recipient,
+  .recipient-media,
+  .recipient-tools,
+  .settings-group,
+  .settings-panel,
+  .file-placeholder {
+    transition:
+      background-color 220ms var(--motion-ease),
+      border-color 220ms var(--motion-ease),
+      color 180ms var(--motion-ease);
+  }
+  .recipient-image-stage:not([data-interacting='true']) > img {
+    transition: transform 280ms var(--motion-ease);
+  }
+  .shelf-view {
+    animation: workspace-enter 260ms var(--motion-ease) both;
+  }
+
+  .tabs a,
+  .filters button,
+  .settings-nav button,
+  .account-trigger,
+  .library-sort-trigger,
+  .shelf .button,
+  .shelf .icon-button {
+    transition:
+      opacity var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-fast),
+      color var(--motion-fast),
+      border-color var(--motion-fast),
+      box-shadow var(--motion-fast),
+      transform var(--motion-fast) var(--motion-ease);
+  }
+
+  .account-trigger:active,
+  .shelf .button:active,
+  .shelf .icon-button:active {
+    transform: scale(0.97);
+  }
+
+  .account-menu,
+  .library-sort-menu {
+    transform-origin: var(--radix-dropdown-menu-content-transform-origin);
+  }
+  .account-menu[data-state='open'],
+  .library-sort-menu[data-state='open'] {
+    animation: menu-enter 180ms var(--motion-ease) both;
+  }
+  .account-menu[data-state='closed'],
+  .library-sort-menu[data-state='closed'] {
+    animation: menu-exit 120ms ease-in both;
+  }
+
+  .picture {
+    animation: workspace-enter var(--motion-surface) var(--motion-ease) both;
+  }
+  .picture img {
+    transition: transform 420ms var(--motion-ease);
+  }
+  .favorite {
+    transition:
+      opacity var(--motion-fast),
+      background-color var(--motion-fast),
+      color var(--motion-fast),
+      transform var(--motion-fast) var(--motion-ease);
+  }
+  .library-gallery .select-file,
+  .library-gallery .favorite {
+    transition:
+      opacity 240ms var(--motion-ease),
+      translate var(--control-duration) var(--motion-settle),
+      scale var(--control-duration) var(--motion-settle),
+      transform var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-fast) var(--motion-ease),
+      color var(--motion-fast) var(--motion-ease),
+      box-shadow var(--motion-fast) var(--motion-ease);
+  }
+  .library-gallery .picture {
+    transition: transform 360ms var(--motion-settle);
+  }
+  .picture-caption,
+  .file-kind-indicator,
+  .file-sharing-indicator {
+    transition:
+      opacity 240ms var(--motion-ease),
+      transform 360ms var(--motion-settle);
+  }
+  .filters button > svg {
+    transition: transform 360ms var(--motion-settle);
+  }
+  .filters button:active {
+    transform: scale(0.97);
+  }
+  .filters button[aria-pressed='true'] > svg {
+    transform: rotate(-6deg);
+  }
+  .picture:has(:focus-visible) .picture-caption {
+    transform: translateY(-2px);
+  }
+  .picture:has(:focus-visible) .file-sharing-indicator {
+    transform: rotate(-8deg);
+  }
+
+  .modal-backdrop {
+    animation: surface-fade 180ms ease-out both;
+  }
+  .viewer {
+    animation: viewer-enter 280ms var(--motion-ease) both;
+  }
+  .modal-backdrop[data-state='closed'] {
+    animation: surface-fade 160ms ease-in reverse both;
+  }
+  .modal-backdrop[data-state='closed'] .viewer {
+    animation: viewer-exit 160ms ease-in both;
+  }
+  .viewer .file-preview {
+    animation: surface-fade 200ms ease-out both;
+  }
+  .queue-item[data-complete='true'] progress {
+    animation: upload-confirm 360ms ease-out;
+  }
+  .queue-item small {
+    transition: color var(--motion-fast);
+  }
+  .queue-item progress::-webkit-progress-value {
+    transition: width 180ms linear;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .collection-card:hover .collection-cover-photo {
+      transform: translate(calc(var(--photo-x) * 1.22), calc(var(--photo-y) - 4%))
+        rotate(calc(var(--photo-angle) * 1.15));
+    }
+    .drop-card:hover .drop-icon {
+      transform: rotate(-3deg) translateY(-2px);
+    }
+    .drop-icon {
+      transition: transform 360ms var(--motion-settle);
+    }
+    .library-gallery .picture:hover,
+    .library-gallery .picture:has(:focus-visible) {
+      transform: translateY(-2px);
+    }
+    .picture:hover .picture-caption {
+      transform: translateY(-2px);
+    }
+    .picture:hover .file-sharing-indicator {
+      transform: rotate(-8deg);
+    }
+    .picture:hover img {
+      transform: scale(1.025);
+    }
+    .collection-card {
+      transition:
+        transform 220ms var(--motion-ease),
+        border-color 180ms;
+    }
+    .collection-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent-soft);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-presence,
+  .settings-section-content,
+  .collection-card,
+  .collection-card img,
+  .collection-card:hover,
+  .collection-card:hover img,
+  .collection-card:focus-visible,
+  .recipient-image-stage > img,
+  .theme-toggle > svg,
+  .auth-password-toggle > svg,
+  .password-strength-bars > span,
+  .password-requirements svg,
+  .pixb-switch-thumb,
+  .library-gallery .picture,
+  .library-gallery .picture img,
+  .library-gallery .picture:hover img,
+  .library-gallery .select-file,
+  .library-gallery .favorite,
+  .picture-caption,
+  .file-kind-indicator,
+  .file-sharing-indicator,
+  .picture-caption .picture-open-arrow,
+  .filters button,
+  .filters button > svg {
+    animation: none;
+    transition: none;
+    transform: none;
+    translate: none;
+    scale: none;
+  }
+}
+
+@keyframes presence-exit {
+  from {
+    opacity: 1;
+    translate: 0 0;
+  }
+  to {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+@keyframes glyph-enter {
+  from {
+    opacity: 0;
+    scale: 0.86;
+    rotate: -8deg;
+  }
+  to {
+    opacity: 1;
+    scale: 1;
+    rotate: 0deg;
+  }
+}
+
+@keyframes workspace-enter {
+  from {
+    opacity: 0;
+    translate: 0 6px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes surface-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes menu-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-3px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes menu-exit {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+@keyframes viewer-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes queue-enter {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+@keyframes viewer-exit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.99);
+  }
+}
+@keyframes upload-confirm {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.5;
+  }
+}

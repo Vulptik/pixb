@@ -1,0 +1,9 @@
+# Modern browsers that support ES2022+ features
+chrome >= 91
+firefox >= 90
+safari >= 14
+edge >= 91
+
+# Exclude IE and other legacy browsers
+not IE 11
+not IE_Mob 11

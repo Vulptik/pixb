@@ -1,0 +1,190 @@
+/* Keep the existing paper/charcoal palette, with a quiet space for the form. */
+.auth-shell,
+.ambient-error {
+  position: relative;
+  isolation: isolate;
+}
+.auth-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+}
+.auth-shell > header {
+  grid-area: 1 / 1;
+}
+.auth-shell > main {
+  grid-area: 2 / 1;
+  margin: 0 auto;
+}
+.auth-shell > footer {
+  grid-area: 3 / 1;
+}
+/* Let the fallback fill the workspace instead of collapsing to its text height. */
+.shelf > .content:has(.page-error) {
+  display: flex;
+  flex-direction: column;
+}
+.shelf-view:has(> .page-error) {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+}
+.auth-shell > main:has(> .page-error) {
+  max-width: var(--page-max-width);
+  padding: 0;
+}
+.page-error {
+  display: grid;
+  place-items: center;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: min(480px, 65svh);
+  margin-top: 24px;
+  padding: 64px 24px;
+  text-align: center;
+}
+.page-error-content {
+  width: 100%;
+  max-width: 480px;
+}
+.page-error h1 {
+  margin: 0;
+  color: var(--heading);
+  font-family: 'Lora', Georgia, serif;
+  font-size: clamp(28px, 3.5vw, 40px);
+  font-weight: 400;
+  letter-spacing: -1.2px;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.page-error h1:focus {
+  outline: none;
+}
+.page-error p {
+  max-width: 38ch;
+  margin: 18px auto 30px;
+  color: var(--muted);
+  font-size: var(--text-ui);
+  line-height: 1.75;
+}
+.page-error-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+}
+.page-error-actions .button {
+  min-width: 144px;
+  min-height: 44px;
+}
+.page-error-actions .text-button {
+  min-height: 44px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .page-error-content {
+    animation: workspace-enter var(--motion-disclosure) var(--motion-ease) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .page-error-actions :is(.button, .text-button) {
+    animation: none;
+    transition: none;
+    transform: none;
+  }
+}
+@media (max-width: 700px) {
+  .page-error {
+    margin-top: 12px;
+    padding: 48px 16px;
+  }
+  .page-error-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+.ambient-background {
+  --drawing-opacity: 0.2;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  color: var(--accent);
+  mask-image: radial-gradient(ellipse 34% 28% at 50% 50%, #0003, #000b 80%, #000 150%);
+}
+:root[data-theme='dark'] .ambient-background {
+  --drawing-opacity: 0.16;
+  color: var(--accent-soft);
+}
+.ambient-drawing {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: var(--drawing-opacity);
+}
+.ambient-logo {
+  opacity: 0.65;
+}
+.ambient-logo rect {
+  fill: currentColor;
+  fill-opacity: 0.45;
+  stroke: currentColor;
+  stroke-width: 0.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .ambient-logo {
+    animation: ambient-logo-cycle var(--logo-duration) var(--motion-ease) var(--logo-delay) both;
+  }
+  .ambient-logo rect {
+    stroke-dasharray: 1 1;
+    animation: ambient-logo-ink var(--logo-duration) var(--motion-ease)
+      calc(var(--logo-delay) + var(--tile-stagger)) both;
+  }
+  .ambient-background[data-paused] :is(.ambient-logo, .ambient-logo rect) {
+    animation-play-state: paused;
+  }
+}
+/* A complete mark is traced, filled, held briefly, then faded before relocation. */
+@keyframes ambient-logo-cycle {
+  0% {
+    opacity: 0;
+  }
+  6%,
+  74% {
+    opacity: 1;
+  }
+  96%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes ambient-logo-ink {
+  0%,
+  5% {
+    stroke-dashoffset: 1;
+    fill-opacity: 0;
+  }
+  36%,
+  43% {
+    stroke-dashoffset: 0;
+    fill-opacity: 0;
+  }
+  62%,
+  100% {
+    stroke-dashoffset: 0;
+    fill-opacity: 1;
+  }
+}
+@media (max-width: 700px) {
+  .ambient-background {
+    --drawing-opacity: 0.16;
+  }
+  :root[data-theme='dark'] .ambient-background {
+    --drawing-opacity: 0.14;
+  }
+}

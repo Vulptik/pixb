@@ -1,0 +1,49 @@
+name: Bug report
+description: Something in PixB doesn't work as it should.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened?
+      description: What you did, what you expected and what happened instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the library
+        2. Drop a file in
+        3. …
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: PixB version
+      description: The image tag you run (for example `1.0.0`) or the commit you built from.
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you run PixB?
+      options:
+        - Docker Compose (compose.production.yml)
+        - Development checkout (npm run dev)
+        - Something else
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Firefox 150 on Windows 11, Safari on iPhone…
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs (optional)
+      description: "`docker compose -f compose.production.yml logs app` shows them. Remove passwords, tokens, addresses and file names you'd rather keep private before pasting."
+      render: text

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <title>PixB</title>
+  
+  <g fill="black" transform="rotate(-9 32 32)">
+    <rect x="8" y="8" width="20" height="20" rx="5.7"/>
+    <rect x="36" y="8" width="20" height="20" rx="5.7"/>
+    <rect x="8" y="36" width="20" height="20" rx="5.7"/>
+    <rect x="36" y="36" width="20" height="20" rx="5.7"/>
+  </g>
+</svg>

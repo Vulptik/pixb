@@ -1,0 +1,146 @@
+.liquid-heart {
+  display: block;
+  overflow: visible;
+  flex-shrink: 0;
+}
+.liquid-heart-shape {
+  transform-origin: 12px 12px;
+}
+.liquid-heart-fill {
+  transform: translateY(24px);
+}
+.liquid-heart[data-filled='true'] .liquid-heart-fill {
+  transform: translateY(-8px);
+}
+.liquid-heart-drop {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.liquid-heart-splash .liquid-heart-drop:nth-child(1) {
+  --drop-x: -5px;
+  --drop-y: -6px;
+}
+.liquid-heart-splash .liquid-heart-drop:nth-child(2) {
+  --drop-x: 1px;
+  --drop-y: -9px;
+}
+.liquid-heart-splash .liquid-heart-drop:nth-child(3) {
+  --drop-x: 6px;
+  --drop-y: -5px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .liquid-heart-fill {
+    transition: transform 650ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .liquid-heart[data-motion='fill'] .liquid-heart-wave {
+    animation: heart-wave-fill 750ms ease-in-out both;
+  }
+  .liquid-heart[data-motion='drain'] .liquid-heart-wave {
+    animation: heart-wave-drain 750ms ease-in-out both;
+  }
+  .liquid-heart[data-motion='fill'] .liquid-heart-shape {
+    animation: heart-fill-settle 650ms ease-out both;
+  }
+  .liquid-heart[data-motion='drain'] .liquid-heart-shape {
+    animation: heart-drain-settle 600ms ease-in-out both;
+  }
+  .liquid-heart[data-motion='fill'] .liquid-heart-splash .liquid-heart-drop {
+    animation: heart-splash 650ms 220ms cubic-bezier(0.2, 0.7, 0.3, 1) both;
+  }
+  .liquid-heart[data-motion='fill'] .liquid-heart-splash .liquid-heart-drop:nth-child(2) {
+    animation-delay: 270ms;
+  }
+  .liquid-heart[data-motion='drain'] .liquid-heart-drips .liquid-heart-drop {
+    animation: heart-drip 600ms 170ms ease-in both;
+  }
+  .liquid-heart[data-motion='drain'] .liquid-heart-drips .liquid-heart-drop:nth-child(2) {
+    animation-delay: 320ms;
+  }
+}
+@keyframes heart-wave-fill {
+  0% {
+    transform: translateX(-6px);
+  }
+  45% {
+    transform: translateX(5px);
+  }
+  75% {
+    transform: translateX(-3px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes heart-wave-drain {
+  0% {
+    transform: translateX(0);
+  }
+  45% {
+    transform: translateX(-6px);
+  }
+  75% {
+    transform: translateX(4px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+@keyframes heart-fill-settle {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(0.92, 1.04);
+  }
+  60% {
+    transform: scale(1.12, 0.96);
+  }
+  82% {
+    transform: scale(0.98, 1.02);
+  }
+}
+@keyframes heart-drain-settle {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.04, 0.94);
+  }
+  72% {
+    transform: scale(0.98, 1.04);
+  }
+}
+@keyframes heart-splash {
+  0% {
+    opacity: 0;
+    transform: translate(0, 3px) scale(0.3);
+  }
+  18% {
+    opacity: 1;
+  }
+  45% {
+    opacity: 0.9;
+    transform: translate(var(--drop-x), var(--drop-y)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--drop-x) * 1.2), calc(var(--drop-y) + 7px)) scale(0.1);
+  }
+}
+@keyframes heart-drip {
+  0% {
+    opacity: 0;
+    transform: translateY(-2px) scale(0.3);
+  }
+  25% {
+    opacity: 0.85;
+    transform: translateY(1px) scale(0.85, 1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(11px) scale(0.1, 0.3);
+  }
+}

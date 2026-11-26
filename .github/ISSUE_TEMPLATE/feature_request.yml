@@ -1,0 +1,19 @@
+name: Feature idea
+description: Suggest something PixB could do.
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: PixB is meant to stay quiet and simple, so not every idea will fit, but every one is read.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What are you trying to do?
+      description: The problem or situation, before any solution.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would help?
+      description: How you picture it working. Examples from other apps are welcome.

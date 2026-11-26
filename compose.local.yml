@@ -1,0 +1,23 @@
+name: pixb
+services:
+  db:
+    image: pixb-postgres:local
+    build:
+      context: .
+      dockerfile: docker/postgres.Dockerfile
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pixb
+      POSTGRES_DB: pixb
+      POSTGRES_PASSWORD: ${PIXB_LOCAL_DB_PASSWORD:?Use npm run dev or npm run local:prepare}
+    ports:
+      - '127.0.0.1:5435:5432'
+    volumes:
+      - db:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U pixb -d pixb']
+      interval: 2s
+      timeout: 5s
+      retries: 30
+volumes:
+  db:

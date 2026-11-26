@@ -1,0 +1,150 @@
+/* Warm paper, charcoal, and restrained gold, inspired by vulptik.dev. */
+:root,
+:root[data-theme='light'] {
+  --text-small: 0.875rem;
+  --text-ui: 0.9375rem;
+  --text-body: 1rem;
+  color-scheme: light;
+  --page: #f5f2eb;
+  --text: #403b34;
+  --heading: #302b25;
+  --muted: #777066;
+  --faint: #82796c;
+  --border: #ded8cd;
+  --panel: #ece7dd;
+  --tint: #eee6d7;
+  --tint-hover: #e7dcc6;
+  --icon-surface: #e5d8bf;
+  --accent: #825923;
+  --accent-soft: #a27a3b;
+  --accent-hover: #67451c;
+  --toast: #403528;
+  --flower: #c7ad7f;
+  --raised: #fffcf6;
+  --glass: #fffcf2ed;
+  --drop-overlay: #f5f2ebf5;
+  --on-accent: #fffaf1;
+  --danger: #a93632;
+  --success: #356342;
+  --warning: #8a601b;
+}
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --page: #0f0f0f;
+  --text: #ccc8c0;
+  --heading: #ede6d1;
+  --muted: #a49d91;
+  --faint: #999184;
+  --border: #302d28;
+  --panel: #191816;
+  --tint: #211e18;
+  --tint-hover: #2e281d;
+  --icon-surface: #342b1d;
+  --accent: #f2c077;
+  --accent-soft: #b79762;
+  --accent-hover: #f6d39e;
+  --toast: #f2c077;
+  --flower: #695333;
+  --raised: #24211c;
+  --glass: #1d1b17ed;
+  --drop-overlay: #151310f5;
+  --on-accent: #272015;
+  --danger: #f39b93;
+  --success: #91c9a0;
+  --warning: #e2b66f;
+}
+.intro h1,
+.recipient-caption h1,
+.empty h1,
+.empty h2 {
+  font-family: 'Lora', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.045em;
+}
+.intro h1 {
+  font-size: clamp(32px, 3.5vw, 46px);
+  line-height: 1.25;
+}
+.brand-mark span {
+  background: var(--accent);
+}
+.brand-mark span:nth-child(2) {
+  opacity: 0.72;
+}
+.brand-mark span:nth-child(3) {
+  opacity: 0.45;
+}
+.brand-dot {
+  color: var(--accent);
+}
+.theme-toggle {
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+.theme-toggle:hover {
+  color: var(--accent);
+}
+.topbar {
+  gap: 20px;
+}
+.recipient > header .theme-toggle {
+  margin-left: auto;
+  margin-right: 24px;
+}
+.tabs .active,
+.filters .chosen {
+  color: var(--heading);
+}
+.drop-card {
+  background: var(--panel);
+}
+.drop-card strong {
+  color: var(--heading);
+}
+.drop-card u {
+  color: var(--accent);
+}
+.tiny-plus {
+  color: var(--on-accent);
+  border-color: var(--panel);
+}
+.image-name {
+  font-family: 'Lora', Georgia, serif;
+}
+@media (min-width: 1500px) {
+  .intro h1 {
+    font-size: 50px;
+  }
+}
+@media (max-width: 700px) {
+  .intro h1 {
+    font-size: 32px;
+    max-width: 290px;
+  }
+  .topbar {
+    gap: 14px;
+  }
+  .recipient > header .theme-toggle {
+    margin-right: 12px;
+  }
+}
+
+:root {
+  --color-background: var(--page);
+  --color-foreground: var(--text);
+  --color-content1: var(--page);
+  --color-content2: var(--panel);
+  --color-content3: var(--tint);
+  --color-content4: var(--tint-hover);
+  --color-divider: var(--border);
+  --color-focus: var(--accent-soft);
+  --color-default: var(--panel);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--on-accent);
+  --color-overlay: #000;
+}
+
+:root {
+  --overlay: #000;
+}

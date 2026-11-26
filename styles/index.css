@@ -1,0 +1,109 @@
+@import 'tailwindcss';
+@import './animations.css';
+@import './shelf.css';
+@import './palette.css';
+@import './library.css';
+@import './recipient.css';
+@import './ambient.css';
+@import './motion.css';
+@import './interactions.css';
+@import './loading.css';
+@import './liquid-heart.css';
+@import './fonts.css';
+@import './mobile-navigation.css';
+@import './mobile-viewer.css';
+@source '../app/**/*.{ts,tsx}';
+@source '../components/**/*.{ts,tsx}';
+@source '../lib/**/*.{ts,tsx}';
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+@theme {
+  --breakpoint-3xl: 120rem;
+  --breakpoint-4xl: 160rem;
+  --breakpoint-5xl: 200rem;
+  --color-background: var(--page);
+  --color-foreground: var(--text);
+  --color-overlay: var(--overlay);
+  --color-divider: var(--border);
+  --color-focus: var(--accent-soft);
+  --color-content1: var(--page);
+  --color-content2: var(--panel);
+  --color-content3: var(--tint);
+  --color-content4: var(--tint-hover);
+  --color-default-50: var(--panel);
+  --color-default-100: var(--panel);
+  --color-default-200: var(--panel);
+  --color-default-300: var(--panel);
+  --color-default-400: var(--panel);
+  --color-default-500: var(--panel);
+  --color-default-600: var(--panel);
+  --color-default-700: var(--panel);
+  --color-default-800: var(--panel);
+  --color-default-900: var(--panel);
+  --color-default: var(--panel);
+  --color-primary-50: var(--accent);
+  --color-primary-100: var(--accent);
+  --color-primary-200: var(--accent);
+  --color-primary-300: var(--accent);
+  --color-primary-400: var(--accent);
+  --color-primary-500: var(--accent);
+  --color-primary-600: var(--accent);
+  --color-primary-700: var(--accent);
+  --color-primary-800: var(--accent);
+  --color-primary-900: var(--accent);
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--on-accent);
+  --color-secondary: hsl(var(--pixb-secondary));
+  --color-secondary-foreground: hsl(var(--pixb-secondary-foreground));
+  --color-success: var(--success);
+  --color-success-foreground: var(--on-accent);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--on-accent);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--on-accent);
+}
+html,
+body {
+  min-width: 0;
+  background: var(--page);
+  color: var(--text);
+}
+/* Keep the viewport artwork above the page color and behind all content. */
+body {
+  isolation: isolate;
+}
+/* Use PixB's shared scrollbar for every scrolling surface, including dialogs. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+*::-webkit-scrollbar-track,
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--border);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+@supports (scrollbar-gutter: stable) {
+  html {
+    scrollbar-gutter: stable;
+  }
+  /* The browser keeps the gutter during scroll lock. Avoid adding a second
+     scrollbar gap when Radix dialogs lock the body. */
+  html body[data-scroll-locked] {
+    margin-right: 0 !important;
+    --removed-body-scroll-bar-size: 0px !important;
+  }
+}
+input,
+select,
+textarea {
+  color: inherit;
+}

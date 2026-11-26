@@ -1,0 +1,24 @@
+.next/
+node_modules/
+tsconfig.tsbuildinfo
+*.log
+*.DS_Store
+*.lock
+.env
+.env.*
+!.env.example
+secrets.json
+postgres-password
+next-env.d.ts
+
+storage/
+coverage/
+.local-rebuild/
+backups/
+.next-pixb/
+dist/
+deploy/
+.codex/
+
+# Local AI-agent instructions, kept private.
+AGENTS.md

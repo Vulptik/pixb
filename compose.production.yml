@@ -1,0 +1,59 @@
+# Production Compose template. Keep the existing volumes on compatible app upgrades.
+# It runs the published images. To upgrade the app, set PIXB_VERSION in .env. The database image
+# only changes when a release's notes say so (PIXB_DATABASE_VERSION). To run your own build
+# instead, see compose.build.yml.
+name: pixb-production
+x-pixb-image: &pixb-image
+  image: ${PIXB_IMAGE:-ghcr.io/vulptik/pixb:${PIXB_VERSION:-1.0.0}}
+
+services:
+  # Explicit first-install step only. Normal restarts never run this service.
+  init-config:
+    <<: *pixb-image
+    profiles: [bootstrap]
+    entrypoint: [node, docker/config.js, initialize]
+    volumes:
+      - config:/app/config
+      - database-secret:/app/database-secret
+
+  app:
+    <<: *pixb-image
+    restart: unless-stopped
+    ports:
+      - '${PIXB_BIND_ADDRESS:-127.0.0.1}:${PIXB_PORT:-3010}:3000'
+    environment:
+      DATABASE_HOST: db
+      POSTGRES_USER: pixb
+      POSTGRES_DB: pixb
+      POSTGRES_PASSWORD_FILE: /run/pixb-database/postgres-password
+      PUBLIC_URL: ${PUBLIC_URL:?Set the client-facing PixB address}
+      STORAGE_PATH: /app/storage
+    volumes:
+      - config:/app/config:ro
+      - database-secret:/run/pixb-database:ro
+      - files:/app/storage
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: ${PIXB_DATABASE_IMAGE:-ghcr.io/vulptik/pixb-postgres:${PIXB_DATABASE_VERSION:-1.0.0}}
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: pixb
+      POSTGRES_DB: pixb
+      POSTGRES_PASSWORD_FILE: /run/pixb-database/postgres-password
+    volumes:
+      - database-secret:/run/pixb-database:ro
+      - database:/var/lib/postgresql
+    healthcheck:
+      test: [CMD-SHELL, 'pg_isready -U pixb -d pixb']
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  config:
+  database-secret:
+  files:
+  database:

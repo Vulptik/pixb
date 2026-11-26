@@ -1,0 +1,219 @@
+.control {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  flex-shrink: 0;
+}
+.header {
+  display: none;
+}
+.disclosure {
+  display: flex;
+  align-items: center;
+}
+.control .liquidButton[data-limited] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: 44px;
+  min-width: 140px;
+}
+.control .liquidButton[data-limited='true'] {
+  background: var(--tint);
+  color: var(--heading);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 24%, transparent);
+}
+.control .liquidButton[data-limited='true']:hover {
+  background: var(--tint-hover);
+}
+.liquidButton > :not(.liquid) {
+  position: relative;
+  z-index: 1;
+}
+.control .liquidButton[data-limited] > svg.liquid {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+.level {
+  transform: translateY(var(--liquid-y));
+  fill: color-mix(in srgb, var(--accent) 34%, transparent);
+}
+.hoverWave {
+  transform: translateX(0);
+}
+.projected {
+  transform: translateY(var(--projected-y));
+  fill: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+.capacity {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  min-height: 44px;
+  padding: 0 7px;
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 8px;
+}
+.capacity:hover {
+  background: var(--panel);
+  color: var(--heading);
+}
+.details {
+  position: absolute;
+  z-index: 40;
+  top: calc(100% + 12px);
+  right: var(--storage-right, 0px);
+  width: 280px;
+  max-width: calc(100vw - 32px);
+  padding: 21px;
+  background: var(--raised);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: none;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4px) scale(0.985);
+  transform-origin: top right;
+  pointer-events: none;
+}
+.details[data-open='true'] {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.details::before {
+  content: '';
+  position: absolute;
+  top: -14px;
+  height: 15px;
+  left: 0;
+  right: 0;
+}
+.detailsHeading {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--muted);
+  font-size: 14px;
+  margin-bottom: 17px;
+}
+.details strong {
+  font-size: 28px;
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  color: var(--heading);
+}
+.details strong small {
+  font-size: 14px;
+  letter-spacing: 0;
+  color: var(--muted);
+  font-weight: 400;
+}
+.details p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+}
+.queueSummary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 17px;
+  font-size: 14px;
+}
+.queueSummary svg {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.queueSeparator {
+  flex: 0 0 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--muted);
+}
+.details .refreshError {
+  border-top: 1px solid var(--border);
+  margin-top: 16px;
+  padding-top: 12px;
+}
+.notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 24px;
+  font-size: 14px;
+  color: var(--warning);
+}
+.notice[data-error='true'] {
+  color: var(--danger);
+}
+.notice button {
+  flex-shrink: 0;
+  min-height: 44px;
+  min-width: 44px;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .level,
+  .projected {
+    transition:
+      transform 850ms var(--motion-ease),
+      opacity 240ms var(--motion-ease);
+  }
+  .details {
+    transition:
+      opacity var(--motion-fast) var(--motion-ease),
+      transform var(--motion-surface) var(--motion-ease),
+      visibility var(--motion-surface);
+  }
+  .notice {
+    animation: workspace-enter var(--motion-surface) var(--motion-ease) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .control *,
+  .control *::before,
+  .notice {
+    animation: none;
+    transition: none;
+  }
+}
+@media (max-width: 700px) {
+  .control .liquidButton[data-limited] {
+    min-width: 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 15px;
+  }
+  .control .liquidButton > span {
+    display: none;
+  }
+  .control:not(.header) > .disclosure {
+    display: none;
+  }
+  .header {
+    display: flex;
+  }
+  :global(.shelf > .topbar) .header {
+    margin-left: auto;
+  }
+  :global(.shelf > .topbar) .header + :global(.account-trigger) {
+    margin-left: 0;
+  }
+  .notice {
+    margin-top: 20px;
+  }
+}

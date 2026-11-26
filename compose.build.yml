@@ -1,0 +1,26 @@
+# Builds PixB from this checkout instead of pulling the published images. Build once with both
+# files, then set PIXB_IMAGE=pixb:local and PIXB_DATABASE_IMAGE=pixb-postgres:local in .env and use
+# compose.production.yml as usual:
+#
+#   docker compose -f compose.production.yml -f compose.build.yml build
+#
+# The build settings live here so the production template never builds by accident when a pull
+# fails, and never names a local build after a published image.
+services:
+  init-config:
+    image: ${PIXB_IMAGE:-pixb:local}
+    build:
+      context: .
+      target: runner
+
+  app:
+    image: ${PIXB_IMAGE:-pixb:local}
+    build:
+      context: .
+      target: runner
+
+  db:
+    image: ${PIXB_DATABASE_IMAGE:-pixb-postgres:local}
+    build:
+      context: .
+      dockerfile: docker/postgres.Dockerfile

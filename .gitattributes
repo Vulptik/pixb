@@ -1,0 +1,2 @@
+docker/*.sh text eol=lf
+prisma/migrations/**/*.sql text eol=lf

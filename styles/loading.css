@@ -1,0 +1,134 @@
+.pixb-loader-mark {
+  --pixb-reduced-animation: pixb-loader-calm;
+  --pixb-flow-duration: calc(8s / 1.5);
+  display: inline-block;
+  flex: 0 0 auto;
+  vertical-align: middle;
+  overflow: visible;
+}
+.pixb-loader-mark rect {
+  fill: currentColor;
+  transform-box: fill-box;
+  transform-origin: center;
+  transform: translate(var(--home-x), var(--home-y));
+}
+.pixb-loader-mark rect:nth-child(1) {
+  --home-x: -7px;
+  --home-y: -7px;
+  --flow-offset: 0deg;
+}
+.pixb-loader-mark rect:nth-child(2) {
+  --home-x: 7px;
+  --home-y: -7px;
+  --flow-offset: 10deg;
+  opacity: 0.72;
+}
+.pixb-loader-mark rect:nth-child(3) {
+  --home-x: -7px;
+  --home-y: 7px;
+  --flow-offset: 30deg;
+  opacity: 0.45;
+}
+.pixb-loader-mark rect:nth-child(4) {
+  --home-x: 7px;
+  --home-y: 7px;
+  --flow-offset: 20deg;
+}
+.pixb-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 180px;
+  padding: 32px 20px;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+.pixb-loading > .pixb-loader-mark {
+  color: var(--accent);
+}
+.pixb-loading-page {
+  min-height: 360px;
+}
+body > .pixb-loading-page {
+  min-height: 100dvh;
+}
+.pixb-loading-inline {
+  flex-direction: row;
+  min-height: 64px;
+  padding: 20px;
+  gap: 10px;
+}
+.auth-submit > .pixb-loader-mark {
+  position: absolute;
+  right: 16px;
+}
+/* Flow at 1.5×: spin → breathe → ripple → tile turns.
+   Every handoff meets at the logo pose with zero velocity. */
+@property --pixb-dance-phase {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pixb-loader-mark {
+    animation: pixb-flow-spin var(--pixb-flow-duration) cubic-bezier(0.37, 0, 0.63, 1) infinite;
+    transform-origin: center;
+  }
+  .pixb-loader-mark rect {
+    --flow-breath-angle: clamp(0deg, calc((var(--pixb-dance-phase) - 90deg) * 4), 360deg);
+    --flow-ripple-angle: clamp(
+      0deg,
+      calc((var(--pixb-dance-phase) - 180deg - var(--flow-offset) * 1.5) * 8),
+      360deg
+    );
+    --flow-turn-angle: clamp(
+      0deg,
+      calc((var(--pixb-dance-phase) - 270deg - var(--flow-offset)) * 3),
+      180deg
+    );
+    --flow-breath: calc((1 - cos(var(--flow-breath-angle))) / 2);
+    --flow-lift: calc((1 - cos(var(--flow-ripple-angle))) / 2);
+    --flow-turn: calc((1 - cos(var(--flow-turn-angle))) / 2);
+    animation: pixb-flow-phase var(--pixb-flow-duration) linear infinite;
+    transform: translate(
+        calc(var(--home-x) * (1 + 0.35 * var(--flow-breath))),
+        calc(var(--home-y) * (1 + 0.35 * var(--flow-breath)) - 3.5px * var(--flow-lift))
+      )
+      rotate(calc(90deg * var(--flow-turn)));
+  }
+}
+@keyframes pixb-flow-spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  25%,
+  100% {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pixb-flow-phase {
+  from {
+    --pixb-dance-phase: 0deg;
+  }
+  to {
+    --pixb-dance-phase: 360deg;
+  }
+}
+/* Reduced motion still communicates ongoing work, without spatial movement. */
+@media (prefers-reduced-motion: reduce) {
+  .pixb-loader-mark {
+    animation: var(--pixb-reduced-animation) 2.8s ease-in-out infinite;
+  }
+}
+@keyframes pixb-loader-calm {
+  0%,
+  100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}

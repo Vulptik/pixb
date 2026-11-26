@@ -1,0 +1,1 @@
+export const COLLECTION_NAME_MAX_LENGTH = 50;

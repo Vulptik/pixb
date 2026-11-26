@@ -1,0 +1,117 @@
+/* Feedback shares the same palette in both themes, without adding resting chrome. */
+.locale {
+  display: inline-grid;
+  place-items: center;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 8px;
+}
+.locale,
+.account-trigger,
+.theme-toggle,
+.settings-nav button,
+.settings-panel .pixb-input-wrapper,
+.shelf-form :is(input, select, textarea) {
+  transition:
+    background-color 140ms,
+    color 140ms,
+    border-color 140ms,
+    box-shadow 140ms,
+    transform 140ms var(--motion-ease);
+}
+.shelf-form :is(input, select, textarea):focus-visible {
+  border-color: var(--accent-soft);
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+.settings-panel .pixb-input-wrapper:focus-within {
+  border-color: var(--accent-soft);
+  outline: 2px solid var(--accent-soft);
+  outline-offset: 2px;
+}
+.settings-panel .pixb-input-wrapper input:focus-visible {
+  outline: none;
+}
+.account-trigger {
+  --account-ring: transparent;
+  outline: 2px solid var(--account-ring);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+.account-trigger:focus-visible,
+.account-trigger[data-state='open'] {
+  --account-ring: var(--accent-soft);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .settings-section-trigger:hover {
+    border-color: var(--accent-soft);
+    background: var(--panel);
+  }
+  .locale:hover,
+  .theme-toggle:hover {
+    background: var(--tint-hover);
+    color: var(--heading);
+  }
+  .theme-toggle:hover {
+    border-color: var(--accent-soft);
+  }
+  .account-trigger:hover {
+    --account-ring: var(--accent-soft);
+  }
+  .settings-nav button:hover {
+    background: var(--tint-hover);
+    color: var(--heading);
+  }
+  .tabs a:not(.active):hover,
+  .filters button:not(.chosen):hover {
+    background: var(--tint);
+    color: var(--heading);
+  }
+  .library-search:hover:not(:focus-within),
+  .settings-panel
+    .pixb-input-wrapper:not([class~='border-danger/60']):not(:has([aria-invalid='true'])):has(
+      :is(input, textarea):enabled:not([readonly])
+    ):hover:not(:focus-within),
+  .shelf-form
+    :is(input, select, textarea):enabled:not([readonly]):not([aria-invalid='true']):hover:not(
+      :focus
+    ) {
+    border-color: var(--accent-soft);
+  }
+  .library-search:hover > svg {
+    color: var(--accent);
+  }
+  .button:not(.primary-button):not(.upload-button):not(:disabled):hover,
+  .icon-button:not(:disabled):hover,
+  .favorite:hover {
+    background: var(--tint-hover);
+  }
+  .icon-button:not(:disabled):hover,
+  .favorite:hover {
+    color: var(--accent);
+  }
+  .text-button:not(:disabled):hover {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .library-sort-trigger:hover,
+  .library-sort-trigger:hover svg {
+    color: var(--accent);
+  }
+  .select-file:hover {
+    outline: 2px solid var(--accent-soft);
+    outline-offset: 2px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locale,
+  .account-trigger,
+  .theme-toggle,
+  .settings-nav button,
+  .settings-panel .pixb-input-wrapper,
+  .shelf-form :is(input, select, textarea) {
+    transition: none;
+  }
+}

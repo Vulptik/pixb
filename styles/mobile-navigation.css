@@ -1,0 +1,232 @@
+.mobile-nav-indicator,
+.account-preferences {
+  display: none;
+}
+.file-type-filters {
+  display: contents;
+}
+
+@media (max-width: 700px) {
+  :root {
+    --mobile-nav-height: calc(76px + env(safe-area-inset-bottom, 0px));
+  }
+  html {
+    scroll-padding-bottom: calc(var(--mobile-nav-height) + 16px);
+  }
+  .shelf {
+    padding-bottom: var(--mobile-nav-height);
+  }
+  .shelf > .content {
+    padding-top: 0;
+  }
+  .shelf > .content .shelf-view > .intro {
+    padding-top: 20px;
+  }
+  .shelf .drop-card.library-drop-zone {
+    display: none;
+  }
+  .shelf .filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .shelf .file-type-filters {
+    position: relative;
+    display: flex;
+    flex: 1;
+    gap: 4px;
+    min-width: 0;
+    overflow-x: auto;
+    padding: 3px 20px 3px 8px;
+    scrollbar-width: none;
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 8px,
+      #000 calc(100% - 18px),
+      transparent
+    );
+  }
+  .file-type-filters::-webkit-scrollbar {
+    display: none;
+  }
+  .shelf .file-type-filters button {
+    flex-shrink: 0;
+    white-space: nowrap;
+    padding-inline: 12px;
+    border-radius: 12px;
+    min-height: 44px;
+  }
+  .shelf .filters .sharing-filter {
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0 12px;
+    min-height: 44px;
+    border-radius: 12px;
+  }
+  .shelf .filters button:focus-visible {
+    outline-offset: 0;
+  }
+  .shelf > .topbar {
+    height: 72px;
+    padding-inline: max(20px, env(safe-area-inset-left)) max(20px, env(safe-area-inset-right));
+  }
+  .shelf > .topbar > :is(.locale, .theme-toggle) {
+    display: none;
+  }
+  .shelf > .topbar > .account-trigger {
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+  }
+  .shelf .toolbar {
+    position: fixed;
+    inset: auto 0 0;
+    z-index: 30;
+    height: var(--mobile-nav-height);
+    padding: 10px max(12px, env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom))
+      max(12px, env(safe-area-inset-left));
+    gap: 12px;
+    flex-wrap: nowrap;
+    background: var(--glass);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid var(--border);
+    border-radius: 20px 20px 0 0;
+  }
+  .shelf .toolbar .tabs {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    flex: 1;
+    min-width: 0;
+    height: 56px;
+    padding: 0;
+    gap: 0;
+    border: 0;
+    background: transparent;
+  }
+  .shelf .toolbar .tabs a {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    min-width: 0;
+    padding: 5px 0;
+    border-radius: 14px;
+    font-size: var(--text-small);
+    line-height: 18px;
+    background: transparent;
+    box-shadow: none;
+  }
+  .shelf .toolbar .tabs a.active {
+    color: var(--accent);
+  }
+  .shelf .toolbar .tabs a svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+  .shelf .toolbar .mobile-nav-indicator {
+    display: block;
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(100% / 3);
+    background: var(--tint);
+    border-radius: 14px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .shelf .toolbar .mobile-nav-indicator[data-active='true'] {
+    opacity: 1;
+  }
+  .shelf .toolbar .upload-button {
+    flex: 0 0 48px;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border-radius: 15px;
+  }
+  .shelf .toolbar .upload-button > svg {
+    flex-basis: 22px;
+    width: 22px;
+    height: 22px;
+  }
+  .shelf .toolbar :is(a, button):focus-visible {
+    outline-offset: 1px;
+  }
+  /* Dialogs are portalled; hide navigation throughout their entrance and exit. */
+  body:has(.modal-backdrop) .shelf .toolbar {
+    visibility: hidden;
+    pointer-events: none;
+  }
+  .upload-queue {
+    bottom: calc(var(--mobile-nav-height) + 14px);
+  }
+  .account-preferences {
+    display: block;
+    margin-bottom: 6px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  .account-menu:has(.account-preferences) {
+    min-width: 260px;
+    max-width: calc(100vw - 24px);
+  }
+  .account-menu .account-preferences button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    width: 100%;
+    min-height: 44px;
+    margin: 0;
+    padding: 10px 8px;
+    border: 0;
+    border-radius: 6px;
+    color: var(--text);
+    letter-spacing: normal;
+  }
+  .account-menu .account-preference-value {
+    margin-left: auto;
+    color: var(--muted);
+  }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: no-preference) {
+  .shelf .toolbar .mobile-nav-indicator {
+    transition:
+      transform var(--motion-disclosure) var(--motion-ease),
+      opacity var(--motion-fast) var(--motion-ease);
+  }
+  .shelf .toolbar .tabs a {
+    transition:
+      color var(--motion-fast) var(--motion-ease),
+      background-color var(--motion-fast) var(--motion-ease),
+      scale var(--motion-surface) var(--motion-settle);
+  }
+  .shelf .toolbar .tabs a:active {
+    scale: 0.96;
+  }
+  .shelf .toolbar .upload-button {
+    transition:
+      background-color var(--motion-fast) var(--motion-ease),
+      transform var(--motion-surface) var(--motion-settle);
+  }
+  .shelf .toolbar .upload-button:active {
+    transform: scale(0.94);
+  }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+  .shelf .toolbar :is(a, button),
+  .account-preferences button {
+    transition: none;
+    animation: none;
+    transform: none;
+  }
+}

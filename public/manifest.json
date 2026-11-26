@@ -1,0 +1,25 @@
+{
+  "name": "PixB",
+  "short_name": "PixB",
+  "icons": [
+    {
+      "src": "/icon-512.png?v=2",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-192x192.png?v=2",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/android-chrome-384x384.png?v=2",
+      "sizes": "384x384",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f5f2eb",
+  "background_color": "#f5f2eb"
+}

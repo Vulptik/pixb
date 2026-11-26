@@ -1,0 +1,218 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// The initial SQL also installs citext/pg_trgm and CHECK constraints.
+// Initialize through npm run db:init; db push alone is not a complete installation.
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id                 BigInt   @id @default(autoincrement()) @db.BigInt
+  email              String   @db.Citext
+  username           String   @db.Citext
+  password_digest    String
+  avatar_data        String?  @db.Text
+  role               Int      @default(0)
+  quota              Int      @default(0)
+  cached_quota_used  BigInt   @default(0)
+  cached_media_count Int      @default(0)
+  theme              String   @default("system") @db.VarChar(10)
+  locale             String   @default("en") @db.VarChar(10)
+  created_at         DateTime @default(now())
+  updated_at         DateTime @updatedAt
+
+  api_keys            ApiKey[]
+  medias              Media[]
+  collections         Collection[]
+  sessions            Session[]
+  totp_secret         TotpSecret?
+  recovery_codes      RecoveryCode[]
+  passkey_credentials PasskeyCredential[]
+  auth_challenges     AuthChallenge[]
+  password_resets     PasswordReset[]
+
+  @@unique([email])
+  @@unique([username])
+  @@index([created_at])
+  @@map("users")
+}
+
+model Session {
+  id         BigInt   @id @default(autoincrement()) @db.BigInt
+  token      String
+  country    String?
+  ip_address String   @db.Inet
+  user_agent String
+  expires_at DateTime
+  user_id    BigInt   @db.BigInt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([expires_at])
+  @@index([user_id, updated_at])
+  @@map("sessions")
+}
+
+model ApiKey {
+  id           BigInt    @id @default(autoincrement()) @db.BigInt
+  name         String    @db.VarChar(30)
+  description  String    @db.VarChar(100)
+  token        String
+  scopes       String    @default("read,write,delete")
+  expires_at   DateTime
+  last_used_at DateTime?
+  user_id      BigInt    @db.BigInt
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([user_id, created_at])
+  @@index([user_id, expires_at])
+  @@map("api_keys")
+}
+
+model Media {
+  id          BigInt   @id @default(autoincrement()) @db.BigInt
+  uid         String
+  upload_id   String?  @unique
+  filename    String   @db.VarChar(255)
+  mime_type   String
+  size        BigInt   @db.BigInt
+  file_data   String   @db.Text
+  user_id     BigInt   @db.BigInt
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  is_shared   Boolean  @default(false)
+  is_favorite Boolean  @default(false)
+
+  user        User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  collections CollectionMedia[]
+
+  @@unique([uid])
+  // Compound uniqueness lets membership foreign keys enforce a common owner.
+  @@unique([id, user_id])
+  @@index([user_id, created_at, id])
+  @@index([user_id, is_favorite, created_at, id])
+  @@index([user_id, is_shared, created_at, id])
+  @@index([filename(ops: raw("gin_trgm_ops"))], type: Gin)
+  @@map("medias")
+}
+
+model Collection {
+  id         BigInt            @id @default(autoincrement()) @db.BigInt
+  name       String            @db.VarChar(50)
+  user_id    BigInt            @db.BigInt
+  created_at DateTime          @default(now())
+  updated_at DateTime          @updatedAt
+  user       User              @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  medias     CollectionMedia[]
+
+  @@unique([id, user_id])
+  @@index([user_id, created_at, id])
+  @@map("collections")
+}
+
+model CollectionMedia {
+  collection_id BigInt     @db.BigInt
+  media_id      BigInt     @db.BigInt
+  user_id       BigInt     @db.BigInt
+  collection    Collection @relation(fields: [collection_id, user_id], references: [id, user_id], onDelete: Cascade)
+  media         Media      @relation(fields: [media_id, user_id], references: [id, user_id], onDelete: Cascade)
+
+  @@id([collection_id, media_id])
+  @@index([media_id])
+  @@map("collection_medias")
+}
+
+model TotpSecret {
+  id          BigInt    @id @default(autoincrement()) @db.BigInt
+  secret      String
+  enabled     Boolean   @default(false)
+  verified_at DateTime?
+  user_id     BigInt    @unique @db.BigInt
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+
+  @@map("totp_secrets")
+}
+
+model RecoveryCode {
+  id         BigInt    @id @default(autoincrement()) @db.BigInt
+  code       String
+  used       Boolean   @default(false)
+  used_at    DateTime?
+  user_id    BigInt    @db.BigInt
+  user       User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at DateTime  @default(now())
+
+  @@index([user_id])
+  @@map("recovery_codes")
+}
+
+model PasskeyCredential {
+  id            BigInt    @id @default(autoincrement()) @db.BigInt
+  name          String    @db.VarChar(100)
+  credential_id Bytes     @unique
+  public_key    Bytes
+  counter       BigInt    @default(0)
+  transports    String?
+  last_used_at  DateTime?
+  user_id       BigInt    @db.BigInt
+  user          User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  created_at    DateTime  @default(now())
+  updated_at    DateTime  @updatedAt
+
+  @@index([user_id])
+  @@map("passkey_credentials")
+}
+
+model AuthChallenge {
+  id         BigInt   @id @default(autoincrement()) @db.BigInt
+  challenge  String   @unique
+  type       String
+  user_id    BigInt?  @db.BigInt
+  expires_at DateTime
+  created_at DateTime @default(now())
+
+  user User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([expires_at])
+  @@index([user_id, type, created_at])
+  @@map("auth_challenges")
+}
+
+model PasswordReset {
+  id         BigInt    @id @default(autoincrement()) @db.BigInt
+  token_hash String    @unique
+  used       Boolean   @default(false)
+  used_at    DateTime?
+  expires_at DateTime
+  user_id    BigInt    @db.BigInt
+  created_at DateTime  @default(now())
+
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([expires_at])
+  @@map("password_resets")
+}
+
+model Setting {
+  id         BigInt   @id @default(autoincrement()) @db.BigInt
+  key        String   @db.VarChar(100)
+  value      String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@unique([key])
+  @@map("settings")
+}

@@ -1,0 +1,20 @@
+# Weekly, grouped updates so dependencies don't go stale without flooding pull requests.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ['*']
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types: [minor, patch]
+# Container bases are updated by hand: the Node image moves together with .node-version and its
+# media libraries, and the PostgreSQL image is pinned by digest (see CONTRIBUTING.md).
