@@ -130,7 +130,7 @@ it('supports two-pointer pinch zoom and resets the fit after resizing', () => {
   fireEvent.pointerCancel(stage, { pointerId: 1 });
   fireEvent.pointerCancel(stage, { pointerId: 2 });
   act(() => resize());
-  expect(image.style.transform).toBe('translate(0px, 0px) scale(1)');
+  expect(image).toHaveStyle({ transform: 'translate(0px, 0px) scale(1)' });
 });
 
 it('keeps a download available if the image fails', () => {

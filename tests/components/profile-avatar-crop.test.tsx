@@ -166,7 +166,7 @@ it('uses a fullscreen mobile editor and rescales a panned crop when its viewport
   Object.defineProperty(viewport, 'clientWidth', { configurable: true, value: 160 });
   act(() => resize([], {} as ResizeObserver));
   expect(image.style.width).toBe('563.2px');
-  expect(image.style.transform).toBe('translate(calc(-50% + 20px), calc(-50% + 10px))');
+  expect(image).toHaveStyle({ transform: 'translate(calc(-50% + 20px), calc(-50% + 10px))' });
   fireEvent.click(screen.getByText('applyAvatar'));
   await waitFor(() => expect(confirm).toHaveBeenCalledTimes(2));
   expect(mocks.draw.mock.calls[1][0]).toBe(image);
@@ -186,7 +186,10 @@ it('zooms and constrains dragging, ends pointer gestures and cancels without exp
   fireEvent.change(screen.getByLabelText('zoom'), { target: { value: '3' } });
   fireEvent.pointerDown(viewport, { clientX: 0, clientY: 0 });
   fireEvent.pointerMove(viewport, { clientX: 10000, clientY: -10000 });
-  expect(image.style.transform).toBe('translate(calc(-50% + 880px), calc(-50% + -352px))');
+  // jsdom 31 simplifies "+ -352px" to "- 352px"; older versions keep it as written.
+  expect(image.style.transform).toMatch(
+    /^translate\(calc\(-50% \+ 880px\), calc\(-50% (?:\+ -|- )352px\)\)$/,
+  );
   fireEvent.pointerUp(viewport);
   fireEvent.pointerMove(viewport, { clientX: 0, clientY: 0 });
   expect(image.style.transform).toContain('880px');
