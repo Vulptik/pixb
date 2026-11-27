@@ -1,8 +1,9 @@
 # Contributing to PixB
 
-Thanks for helping. PixB is meant to stay quiet and simple, so please open an issue to talk about a
-new feature or design change before building it. Bug reports, fixes and translations are always
-welcome.
+Thanks for helping. PixB is meant to stay quiet and simple, so please start a
+[discussion](https://github.com/Vulptik/pixb/discussions) about a new feature or design change
+before building it. Questions and ideas are welcome there too. Bug reports, fixes and translations
+are always welcome.
 
 Development happens in the open on `main`, so open pull requests against `main`. Releases are tags
 such as `v1.0.0`. Contributions are licensed under the same terms as the code or assets they change.
