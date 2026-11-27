@@ -1,5 +1,8 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Questions and ideas
+    url: https://github.com/Vulptik/pixb/discussions
+    about: Ask a question or suggest a feature before opening an issue.
   - name: Security issue
     url: https://github.com/Vulptik/pixb/security
     about: Report security issues privately, not in a public issue.
